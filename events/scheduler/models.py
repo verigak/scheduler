@@ -2,6 +2,8 @@
 # representing a 30min interval, for a total of 48 bits to represent
 # a full day
 
+import random
+
 from datetime import date, time
 
 from django.core.validators import ValidationError
@@ -70,10 +72,16 @@ def get_available_user(date, mask):
     busy_ids = set(e.assignee_id for e in overlapping)
 
     matches = available.exclude(id__in=busy_ids) \
-        .alias(event_count=Count('event', filter=Q(event__date=date))) \
+        .annotate(event_count=Count('event', filter=Q(event__date=date))) \
         .order_by('event_count')
 
-    return matches.first()
+    if matches.count() == 0:
+        return None
+
+    count = matches.first().event_count
+
+    # Return a random user from those matching the minimum count
+    return random.choice(matches.filter(event_count=count))
 
 
 def timerange_to_bitmask(t0, t1):
