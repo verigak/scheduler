@@ -51,11 +51,16 @@
 
 <div id="generate">
     <button id="generate-event">Generate A Random Event</button>
+    <button id="generate-hourly">Generate An Hourly Event</button>
 </div>
 <script>
-    var button = document.getElementById("generate-event");
-    button.addEventListener("click", function(e) {
+    document.getElementById("generate-event").addEventListener("click", function(e) {
         fetch("{% url 'generate-day' current %}", {method: "POST"}).then(res => {
+            location.reload();
+        });
+    }, false);
+    document.getElementById("generate-hourly").addEventListener("click", function(e) {
+        fetch("{% url 'hourly-day' current %}", {method: "POST"}).then(res => {
             location.reload();
         });
     }, false);

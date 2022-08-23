@@ -8,4 +8,5 @@ urlpatterns = [
     path('user/<int:uid>', views.user, name='user'),
     path('user/<int:uid>/<str:day>', views.user, name='user-day'),
     path('generate/<str:day>', views.generate_event, name='generate-day'),
+    path('hourly/<str:day>', views.generate_hourly_event, name='hourly-day'),
 ]

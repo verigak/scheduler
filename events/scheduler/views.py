@@ -1,6 +1,6 @@
 import random
 
-from datetime import date, timedelta
+from datetime import date, time, timedelta
 
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
@@ -86,6 +86,7 @@ def user(request, uid, day=''):
     return render(request, 'scheduler/user.html', context)
 
 
+# Generates a random event of arbitrary duration
 @require_http_methods(['POST'])
 @csrf_exempt
 def generate_event(request, day=''):
@@ -97,6 +98,25 @@ def generate_event(request, day=''):
     
     starts, ends = sorted(random.sample(list(all_intervals()), 2))
     event = Event(name='Random Event', date=d, starts=starts, ends=ends)
+    event.save()
+    print(f'Generated event: {event}')
+    return HttpResponse(f'Generated Event for {d}: {starts}-{ends}\n')
+
+
+# Generates an hourly random event
+@require_http_methods(['POST'])
+@csrf_exempt
+def generate_hourly_event(request, day=''):
+    try:
+        d = date.fromisoformat(day)
+    except ValueError:
+        # Use a random day in one of the next 7 days
+        d = date.today() + timedelta(days=random.randint(1, 7))
+    
+    h = random.randint(0, 23)
+    starts = time(h)
+    ends = time(h+1) if h < 23 else time()
+    event = Event(name='Random Hourly Event', date=d, starts=starts, ends=ends)
     event.save()
     print(f'Generated event: {event}')
     return HttpResponse(f'Generated Event for {d}: {starts}-{ends}\n')
