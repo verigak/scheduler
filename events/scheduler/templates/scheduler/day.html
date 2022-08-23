@@ -14,7 +14,7 @@
     <div class="next"><a href="{% url 'day' next %}">{{ next }}</a></div>
 </header>
 <h1>{{ current }}</h1>
-<main class="day">
+<div class="day">
     <div></div>
     {% for t in intervals %}
     <div>{% if t.minute == 0 %}{{ t|time:"H:i" }}{% endif %}</div>
@@ -32,7 +32,22 @@
             {% endif %}
         {% endfor %}
     {% endfor %}
-</main>
+</div>
+
+{% if unassigned %}
+<h2>{{ unassigned.count }} Unassigned Event{{ unassigned.count|pluralize }}</h2>
+<div class="unassigned">
+    <div class="header">Name</div>
+    <div class="header">Starts</div>
+    <div class="header">Ends</div>
+    {% for event in unassigned %}
+    <div>{{ event.name }}</div>
+    <div>{{ event.starts|time:"H:i" }}</div>
+    <div>{{ event.ends|time:"H:i" }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
 <div id="generate">
     <button id="generate-event">Generate A Random Event</button>
 </div>

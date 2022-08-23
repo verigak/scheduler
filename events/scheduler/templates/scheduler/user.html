@@ -14,7 +14,7 @@
     <div class="next"><a href="{% url 'user-day' user.id next %}">{{ next }}</a></div>
 </header>
 <h1>{{ user.name }} – {{ current }}</h1>
-<main class="user">
+<div class="user">
     {% for interval, event1, event2 in rows %}
     <div>{{ interval|time:"H:i" }}</div>
         {% if event1 is None %}
@@ -37,6 +37,6 @@
         <div class="busy">{{ event2 }}</div>
         {% endif %}
     {% endfor %}
-</main>
+</div>
 </body>
 </html>

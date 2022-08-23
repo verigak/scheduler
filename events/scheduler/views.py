@@ -31,9 +31,13 @@ def day(request, day=''):
             else:
                 intervals.append('FREE')
         rows.append({'user': user, 'intervals': intervals})
+
+    unassigned = Event.objects.filter(date=d, assignee=None).order_by('starts', 'ends', 'name')
+
     context = {
         'intervals': all_intervals(),
         'rows': rows,
+        'unassigned': unassigned,
         'prev': (d - timedelta(days=1)).isoformat(),
         'today': date.today(),
         'next': (d + timedelta(days=1)).isoformat(),
