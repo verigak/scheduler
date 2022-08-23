@@ -1,0 +1,42 @@
+header.day {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+header.user {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+header>.today {
+    text-align: center;
+}
+
+header>.next {
+    text-align: right;
+}
+
+main.day {
+    display: grid;
+    grid-template-columns: repeat(49, 1fr);
+    grid-auto-rows: 40px;
+}
+
+main.user {
+    display: grid;
+    grid-template-columns: 60px 200px 200px;
+    grid-auto-rows: 30px;
+}
+
+.unavailable {
+    background-color: aliceblue;
+}
+
+.busy {
+    background-color: crimson;
+    color: white;
+}
+
+.free {
+    background-color: palegreen;
+}

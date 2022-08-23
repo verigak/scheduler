@@ -6,7 +6,6 @@ import random
 
 from datetime import date, time
 
-from django.core.validators import ValidationError
 from django.db import models
 from django.db.models import Count, F, Q
 
@@ -121,3 +120,9 @@ def bitmask_to_timerange(mask):
 def bitindex_to_time(i):
     h, m = divmod(i, 2)
     return time(h, 30 if m == 1 else 0)
+
+
+def all_intervals():
+    for h in range(24):
+        for m in (0, 30):
+            yield time(h, m)

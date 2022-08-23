@@ -1,0 +1,42 @@
+{% load static %}
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{% static 'scheduler/main.css' %}">
+    <title>{{ user.name}} – {{ current }}</title>
+</head>
+<body>
+<header class="user">
+    <div><a href="{% url 'day' current %}">Show All Users</a></div>
+    <div class="prev"><a href="{% url 'user-day' user.id prev %}">{{ prev }}</a></div>
+    <div class="today"><a href="{% url 'user' user.id %}">Today</a></div>
+    <div class="next"><a href="{% url 'user-day' user.id next %}">{{ next }}</a></div>
+</header>
+<h1>{{ user.name }} – {{ current }}</h1>
+<main class="user">
+    {% for interval, event1, event2 in rows %}
+    <div>{{ interval|time:"H:i" }}</div>
+        {% if event1 is None %}
+        <div class="unavailable"></div>
+        {% elif event1 == "" %}
+        <div class="free"></div>
+        {% elif event1 == "." %}
+        <div class="busy"></div>
+        {% else %}
+        <div class="busy">{{ event1 }}</div>
+        {% endif %}
+
+        {% if event2 is None %}
+        <div class="unavailable"></div>
+        {% elif event2 == "" %}
+        <div class="free"></div>
+        {% elif event2 == "." %}
+        <div class="busy"></div>
+        {% else %}
+        <div class="busy">{{ event2 }}</div>
+        {% endif %}
+    {% endfor %}
+</main>
+</body>
+</html>
