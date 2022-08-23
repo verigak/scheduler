@@ -1,6 +1,11 @@
+import random
+
 from datetime import date, timedelta
 
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 from .models import User, Event, all_intervals 
 
@@ -75,3 +80,19 @@ def user(request, uid, day=''):
         'current': d.isoformat(),
     }
     return render(request, 'scheduler/user.html', context)
+
+
+@require_http_methods(['POST'])
+@csrf_exempt
+def generate_event(request, day=''):
+    try:
+        d = date.fromisoformat(day)
+    except ValueError:
+        # Use a random day in one of the next 7 days
+        d = date.today() + timedelta(days=random.randint(1, 7))
+    
+    starts, ends = sorted(random.sample(list(all_intervals()), 2))
+    event = Event(name='Random Event', date=d, starts=starts, ends=ends)
+    event.save()
+    print(f'Generated event: {event}')
+    return HttpResponse(f'Generated Event for {d}: {starts}-{ends}\n')

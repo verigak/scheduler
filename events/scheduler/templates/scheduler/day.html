@@ -33,6 +33,17 @@
         {% endfor %}
     {% endfor %}
 </main>
+<div id="generate">
+    <button id="generate-event">Generate A Random Event</button>
+</div>
+<script>
+    var button = document.getElementById("generate-event");
+    button.addEventListener("click", function(e) {
+        fetch("{% url 'generate-day' current %}", {method: "POST"}).then(res => {
+            location.reload();
+        });
+    }, false);
+</script>    
 {% else %}
 <p>No users available.</p>
 {% endif %}

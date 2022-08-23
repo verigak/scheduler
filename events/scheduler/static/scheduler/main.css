@@ -40,3 +40,8 @@ main.user {
 .free {
     background-color: palegreen;
 }
+
+#generate {
+    text-align: center;
+    padding: 20px;
+}

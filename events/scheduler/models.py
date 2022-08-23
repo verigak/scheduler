@@ -46,7 +46,9 @@ class Event(models.Model):
     assignee = models.ForeignKey(User, models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.name} ({self.date})'
+        starts = self.starts.isoformat("minutes")
+        ends = self.ends.isoformat("minutes")
+        return f'{self.name} - {self.date}: {starts} - {ends}'
 
     def save(self, *args, **kwargs):
         mask = timerange_to_bitmask(self.starts, self.ends)
