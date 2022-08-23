@@ -85,8 +85,9 @@ def get_available_user(date, mask):
     return random.choice(matches.filter(event_count=count))
 
 
+# If t1 is 0:00 it means go to the end of the day
 def timerange_to_bitmask(t0, t1):
-    assert t0 <= t1
+    assert t1 == time() or t0 <= t1
     assert t0.minute in (0, 30)
     assert t1.minute in (0, 30)
     assert t0.second == 0
@@ -95,7 +96,11 @@ def timerange_to_bitmask(t0, t1):
     assert t1.microsecond == 0
 
     b0 = t0.hour * 2 + (0 if t0.minute == 0 else 1)
-    b1 = t1.hour * 2 + (0 if t1.minute == 0 else 1)
+    if t1 == time():
+        b1 = 48
+    else:
+        b1 = t1.hour * 2 + (0 if t1.minute == 0 else 1)
+
     mask = 0
     for i in range(b0, b1):
         mask |= 1 << i
@@ -112,7 +117,10 @@ def bitmask_to_timerange(mask):
     except ValueError:
         return (time(), time())  # No 1 bit found, return Empty reange
 
-    j = b.index(False, i)
+    try:
+        j = b.index(False, i)
+    except ValueError:
+        j = 48
 
     t0 = bitindex_to_time(i)
     t1 = bitindex_to_time(j)
@@ -120,6 +128,8 @@ def bitmask_to_timerange(mask):
 
 
 def bitindex_to_time(i):
+    if i == 48:
+        return time()
     h, m = divmod(i, 2)
     return time(h, 30 if m == 1 else 0)
 
@@ -128,3 +138,4 @@ def all_intervals():
     for h in range(24):
         for m in (0, 30):
             yield time(h, m)
+    yield time(0, 0)

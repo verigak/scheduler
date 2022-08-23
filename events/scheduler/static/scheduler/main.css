@@ -18,7 +18,7 @@ header>.next {
 
 .day {
     display: grid;
-    grid-template-columns: repeat(49, 1fr);
+    grid-template-columns: repeat(50, 1fr);
     grid-auto-rows: 40px;
 }
 

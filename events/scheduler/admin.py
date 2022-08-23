@@ -1,3 +1,5 @@
+from datetime import time
+
 from django import forms
 from django.contrib import admin
 
@@ -8,7 +10,7 @@ class UserAdminForm(forms.ModelForm):
     def clean(self):
         starts = self.cleaned_data['availability_starts']
         ends = self.cleaned_data['availability_ends']
-        if ends <= starts:
+        if ends != time() and ends <= starts:
             raise forms.ValidationError({'availability_ends': 'Event must end after start time'})
         if starts.minute not in (0, 30) or starts.second > 0 or starts.microsecond > 0:
             raise forms.ValidationError({'availability_starts': 'Times must be in exact multiples of 30 min'})
@@ -28,7 +30,7 @@ class EventAdminForm(forms.ModelForm):
     def clean(self):
         starts = self.cleaned_data['starts']
         ends = self.cleaned_data['ends']
-        if ends <= starts:
+        if ends != time() and ends <= starts:
             raise forms.ValidationError({'ends': 'Event must end after start time'})
         if starts.minute not in (0, 30) or starts.second > 0 or starts.microsecond > 0:
             raise forms.ValidationError({'starts': 'Times must be in exact multiples of 30 min'})
