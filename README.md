@@ -1,4 +1,4 @@
-# An Django event scheduler
+# A Django event scheduler
 
 `Events` and `Users` are created from the admin UI.
 
