@@ -73,7 +73,7 @@ def user(request, uid, day=''):
             rows.append((interval, name))
 
     # Pack 2 intervals per row for a more compact layout
-    packed = [(rows[i][0], rows[i][1], rows[i+1][1]) for i in range(0, len(rows), 2)]
+    packed = [(rows[i][0], rows[i][1], rows[i+1][1]) for i in range(0, len(rows)-1, 2)]
 
     context = {
         'user': user,
